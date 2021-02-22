@@ -1,6 +1,8 @@
 /* require and import section */
 
 import './styles.css';
+import { Tooltip, Toast, Popover } from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 const axios = require('axios');
 const _ = require('lodash');
 const hereApiModule = require('@here/maps-api-for-javascript');
