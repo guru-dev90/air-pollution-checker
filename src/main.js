@@ -7,7 +7,7 @@ const axios = require('axios');
 const _ = require('lodash');
 const hereApiModule = require('@here/maps-api-for-javascript');
 
-/* end require section */
+/* end require and import section */
 
 /**/ 
 const airQualityTableLegenda = {
@@ -78,68 +78,113 @@ checkAnoterLocationButton.addEventListener('click',() => {
 
 
 
-function getLocationCoordinates(location){
+function getLocationCoordinates(userProvidedLocation){
 
-  if(location){  // get the lat/lng of the location provided by the user
-    
-    // Instantiate a platform object:
-    let platform = new H.service.Platform({
-      'apikey': process.env.HERE_SERVICE_APIKEY
-    });
+  if(userProvidedLocation){  // get the lat/lng of the location provided by the user
 
-    let service = platform.getSearchService();
-
-    // Call the geocode method with the geocoding parameters,
-    // the callback and an error callback function (called if a
-    // communication error occurs):
-    service.geocode({
-      q: location
-    }, (results) => {
-      // takes just the first result
-      let item = results.items[0];
-      console.log('Uso delle API here');
-      console.log('Risultati:');
-      console.log(item);
-      apiQuery(location,item.position.lat, item.position.lng);
-
-      /*results.items.forEach((item) => {
-        console.log('Uso delle API here');
-        console.log('Risultati:');
-        console.log(item);
-        apiQuery(location,item.position.lat, item.position.lng);
-      });*/
-    }, alert); // vedere error callback alert
-
+    getCoorinatesOfProvidedLocationWithHereApi(userProvidedLocation);
 
   }
   else{  // get the device's current location in lat/lng format
-    let options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
-    
-    function success(pos) {
-      let crd = pos.coords;
-    
-      console.log('Your current position is:');
-      console.log(`Latitude : ${crd.latitude}`);
-      console.log(`Longitude: ${crd.longitude}`);
-      console.log(`More or less ${crd.accuracy} meters.`);
-      apiQuery( location, crd.latitude, crd.longitude );
-    }
-    
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-    
-    navigator.geolocation.getCurrentPosition(success, error, options);
+
+    getDeviceCurrentCoordinatesWithJSApi();
 
   }
 
 }
 
-function apiQuery( location, lat, lng ){
+function alert(){
+  console.log('Error with Geocoding/Reverse Geocoding service');
+}
+
+function getCoorinatesOfProvidedLocationWithHereApi(userProvidedLocation){
+
+  // Instantiate a platform object:
+  let platform = new H.service.Platform({
+    'apikey': process.env.HERE_SERVICE_APIKEY
+  });
+
+  let service = platform.getSearchService();
+
+  // Call the geocode method with the geocoding parameters,
+  // the callback and an error callback function (called if a
+  // communication error occurs):
+  service.geocode({
+    q: userProvidedLocation
+  }, (results) => {
+    // takes just the first result
+    let item = results.items[0];
+    console.log('Uso delle API here');
+    console.log('Risultati:');
+    console.log(item);
+    let locationWithExtendedInformation = _.get(item, 'address.label' );
+    let lat = _.get(item, 'position.lat' );
+    let lng = _.get(item, 'position.lng' );
+    queryAqicnApi( locationWithExtendedInformation, lat, lng );
+
+    /*results.items.forEach((item) => {
+      console.log('Uso delle API here');
+      console.log('Risultati:');
+      console.log(item);
+      apiQuery(location,item.position.lat, item.position.lng);
+    });*/
+  }, alert); // vedere error callback alert
+
+}
+
+function getDeviceCurrentCoordinatesWithJSApi(){
+
+  let options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  
+  function success( currentPositionoordinates ) {
+    let coordinates = _.get( currentPositionoordinates , 'coords' );
+    let lat = _.get( coordinates, 'latitude');
+    let lng = _.get( coordinates, 'longitude');
+
+    console.log('Your current position is:');
+    console.log(`Latitude : ${coordinates.latitude}`);
+    console.log(`Longitude: ${coordinates.longitude}`);
+    console.log(`More or less ${coordinates.accuracy} meters.`);
+    reverseGeocodeFromCoordinates( lat, lng );
+  }
+  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+}
+
+function reverseGeocodeFromCoordinates( lat, lng ){
+    // Instantiate a map and platform object:
+  let platform = new H.service.Platform({
+    'apikey': process.env.HERE_SERVICE_APIKEY
+  });
+
+  // Get an instance of the search service:
+  var service = platform.getSearchService();
+
+  // Call the reverse geocode method with the geocoding parameters,
+  // the callback and an error callback function (called if a
+  // communication error occurs):
+  service.reverseGeocode({
+    at: `${lat},${lng}`
+  }, (results) => {
+    
+    let locationWithExtendedInformation = _.get(results.items[0], 'address.city') + ', ' +
+                   _.get(results.items[0], 'address.state') + ', ' +
+                   _.get(results.items[0], 'address.countryName');
+    queryAqicnApi( locationWithExtendedInformation, lat, lng);
+  
+  }, alert);
+}
+
+function queryAqicnApi( locationWithExtendedInformation, lat, lng ){
   //pollution api key:  0b4dd2b230957a8157eddcbf4561fa70aab8e91b
   //let lat = 42.505699;
   //let lng = 12.656161;
@@ -150,7 +195,7 @@ function apiQuery( location, lat, lng ){
   axios.get( endpointLink)
     .then(function (response) {
       console.log(response);
-      parseJson( location, response );
+      parseJson( locationWithExtendedInformation, response );
     })
     .catch(function (error) {
       console.log(error);
@@ -160,7 +205,7 @@ function apiQuery( location, lat, lng ){
     }); 
 }
 
-function parseJson( cityToQuery, jsonResponse ){
+function parseJson( locationWithExtendedInformation, jsonResponse ){
 
   let airQualityIndicator = _.get(jsonResponse, 'data.data.aqi' );
   let airQualityIndicatorDescription;
@@ -200,7 +245,7 @@ function parseJson( cityToQuery, jsonResponse ){
   let sensorStationDescription = _.get(jsonResponse, 'data.data.city.name' );
   let lastUpdate = _.get(jsonResponse, 'data.data.time.s' ); // formattare in che formato ???
 
-  displayData(cityToQuery,airQualityIndicator,airQualityIndicatorDescription,iaqiObject,sensorStationDescription,lastUpdate);
+  displayData(locationWithExtendedInformation,airQualityIndicator,airQualityIndicatorDescription,iaqiObject,sensorStationDescription,lastUpdate);
 }
 
 function displayData(cityProvinceNationString, airQualityIndicatorString, airQualityIndicatorDescriptionString, 
