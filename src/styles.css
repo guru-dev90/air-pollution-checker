@@ -10,50 +10,41 @@ html{
 }
 
 body{
-    background-image: url('./img/background-big.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    min-height: 100%;
-    height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
-
-    font-family: 'Raleway','Open Sans',sans-serif;
+    min-height: 100%;
+    height: 100vh;
     font-style: normal;
-    font-size: 18px;
-    line-height: 1.3em;
     text-transform: none;
-    font-weight: normal;
+    background-image: url('./img/background-big.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+
 }
 
 .main-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
-}
 
-.contentScreen1ContainerClass, .contentScreen2ContainerClass{
     box-shadow:inset 0px 1px 0px 0px #ffffff;
 	background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
 	background-color:#ededed;
 	border:1px solid #dcdcdc;
-	color:#777777;
-
-    width: 70%;
+	color:#000000;
+    width: 98% !important;
     height: 90%;
-    padding: 20px, 15px;
     border-radius: 15px;
-    opacity: 0.9;
-}
+    opacity: 0.8;
 
-h1{
-    font-size: 42px;
-    line-height: 1.4em;
-    font-weight: 900;
-    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.3em;
+    font-weight:500;
+    letter-spacing: 0.5px;
 }
 
 .button {
@@ -71,6 +62,9 @@ h1{
 	padding:10px 24px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #154682;
+
+    width: 50%;
+    height: 70%;
 }
 .button:hover {
 	background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
@@ -84,24 +78,35 @@ h1{
 /*End Site Wide Styles*/
 
 /*
+
+CONTENT SCREEN1 STYLES
+
+*/
+
 .contentScreen1ContainerClass{
-    background-color: #4a4840;
-    width: 70%;
-    height: 90%;
-    padding: 20px, 15px;
-    border-radius: 15px;
-    opacity: 0.9;
-}*/
+    height: 80%;
+}
 
 .contentScreen1Title{
+
+    font-family: "Rammetto One", Open-sans;
+    text-transform: uppercase;
     text-align: center;
+    font-size: 32px;
+    line-height: 1.4em;
+    letter-spacing: 1px;
+    color: #007dc1;
+    text-shadow: rgb(0, 0, 0) 3px 3px 2px;
     margin: 15px 0px;
+
 }
 
 .contentScreen1Subtitle{
+    font-weight: bolder;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 0.5em;
+    margin-left: 0.9em;
+    display: none;
 }
 
 .blockText1, .blockText2, .blockText3 {
@@ -109,26 +114,71 @@ h1{
     line-height: 1.6em;
     margin-left: 1.1em;
     margin-right: 1.1em;
+    letter-spacing: 1px;
+}
+
+.blockText1{
+    display: none;
+}
+
+.blockText2{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.blockText3{
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .locationInsertAndButtonRow{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 1.3em 0;
+    line-height: normal;
+}
+
+.locationInsertInputTextRowClass{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .locationInsertInputText{
-    width: 60%;
+    width: 80%;
+    height: 140%;
+    border-radius: 5px;
+    border-color: rgb(46, 45, 45);  
+    padding-left: 5px;
 }
 
-.locationCheckButton{
+.locationInsertInputText:active, .locationInsertInputText:focus{
+    box-shadow: 0 0 8px #007dc1;
+    outline: none;
+}
+
+.locationCheckButtonRowClass{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.locationCheckButtonClass{
+    margin-top: 15px;
     margin-left: 0.9em;
     margin-right: 0.9em;
 }
 
-.currentLocationCheckButton{
+.currentLocationCheckButtonRowClass{
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.currentLocationCheckButtonClass{
+ 
+    width: 65%;
+    height: 90%;
 }
 
 /*
@@ -142,43 +192,87 @@ CONTENT SCREEN2 STYLES
     width: 70%;
     height: 90%;*/
     display: none;
+    height: 80%;
 }
 
 .cityProvinceNationClass{
+    
+    /*margin-top: 20px;*/
+    text-transform: uppercase;
+
+    font-weight: bold;
     text-align: center;
-    margin-top: 20px;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: rgba(0, 0, 0, 0.88);
 }
 
 .airQualityIndicatorClass{
     text-align: center;
-    margin: 1.4em;
+    margin: 1.2em;
+    font-size: 32px;
+    letter-spacing: 3px;
+    font-weight: bolder;
+}
+
+.airQualityIndicatorSummaryClass{
+
+    font-weight: bold;
+    text-align: center;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: rgba(0, 0, 0, 0.88);
 }
 
 .airQualityIndicatorDescriptionClass{
-    text-align: center;
+    text-align: justify;
     margin-bottom: 10px;
+    display: none;
+    letter-spacing: 1px;
 }
 
 .detailsClass{
+    
     text-align: center;
+    display: none;
 }
 
 .iaqiRow{
-    border: solid 1px black;
+    border: solid 1px #6c757d;
     margin: 2.3em;
+    display: none !important;
 }
 
 .iaqiCol{
-    border: solid 1px black;
+    border: solid 1px #6c757d;
+}
+
+.colCell{
+    text-align: center;
+    margin-top: 15px;
+}
+
+.emoticonImageColClass{
+    text-align: center;
+}
+
+.emoticonImageClass{
+
+    width: 75px;
+    height: 75px;
+
 }
 
 .sensorStationLocationClass{
+    font-size: 14px;
     text-align: center;
+    margin-top: 2rem;
 }
 
 .lastUpdateClass{
+    font-size: 14px;
     text-align: center;
-    margin-top: 1.2em;
+    
 }
 
 .checkAnoterLocationButtonClass{
@@ -187,6 +281,428 @@ CONTENT SCREEN2 STYLES
 }
 
 .checkAnoterLocationButtonClass button{
-    margin: 1.3em;
+  
+    width: 80%;
+    height: 100%;
+    
 }
 
+/*
+
+ERROR BULLETIN BOARD STYLES
+
+*/
+
+.errorBulletinBoardClass{
+    color: red;
+    margin-top: 1.9em;
+}
+
+/* -------------------------------------------MEDIA QUERIES---------------------------------------------------------- */
+
+
+/* media queries for mobiles with extra-height */
+
+@media (max-width: 599px ) and ( min-height: 620px ){
+
+    .blockText2{
+        margin-top: 30px;
+        margin-bottom: 40px;
+    }
+
+    .blockText3{
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+
+    .emoticonImageClass{
+        margin-top: 2em;
+    }
+
+    .sensorStationLocationClass{
+        margin-top: 3em;
+    }
+
+    .checkAnoterLocationButtonClass button{
+        margin-top: 1em;
+    }
+}
+
+@media (max-width: 599px ) and (min-height: 720px){
+
+    .main-container{
+        font-size: 18px;
+    }
+
+    .button{
+        font-size: 18px;
+    }
+
+    .contentScreen1Title{
+        font-size: 38px;
+    }
+
+    .cityProvinceNationClass{
+        font-size: 26px;
+    }
+
+    .airQualityIndicatorSummaryClass{
+        font-size: 22px;
+    }
+
+    .emoticonImageClass{
+        width: 100px;
+        height: 100px;
+    }
+
+    .sensorStationLocationClass{
+        font-size: 18px;
+    }
+
+    .lastUpdateClass{
+        font-size: 18px;
+    }
+}
+
+/* media queries for tablets */
+
+@media (min-width: 600px) and ( min-height: 800px ){
+
+    .main-container{
+        font-size: 21px;
+    }
+
+    .button{
+        font-size: 21px;
+    }
+
+    .contentScreen1Title{
+        font-size: 42px;
+    }
+
+    .contentScreen1Subtitle{
+        display: block;
+    }
+
+    .blockText1{
+        display: block;
+    }
+
+    .blockText2{
+        display: block;
+    }
+
+    .contentScreen2ContainerClass{
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .cityProvinceNationClass{
+        font-size: 32px;
+    }
+
+    .airQualityIndicatorClass{
+        font-size: 36px;
+    }
+
+    .airQualityIndicatorSummaryClass{
+        font-size: 26px;
+        margin-bottom: 2em;
+    }
+
+    .airQualityIndicatorDescriptionClass{
+        display: block;
+        font-size: 24px;
+    }
+
+    .detailsClass{
+        display: block;
+        font-size: 24px;
+    }
+
+    .detailsTextClass{
+        font-weight: bolder;
+        margin: 1.4em;
+    }
+
+    .iaqiRow{
+        display: flex !important;
+    }
+
+    .emoticonImageClass{
+        width: 100px;
+        height: 100px;
+        display: none;
+    }
+
+    .sensorStationLocationClass{
+        font-size: 21px;
+    }
+
+    .lastUpdateClass{
+        font-size: 21px;
+    }
+
+    .checkAnoterLocationButtonClass button{
+        font-size: 24px;
+        margin-top: 30px;
+    }
+
+}
+
+@media (min-width: 800px) and ( min-height: 800px ){
+    .main-container{
+        font-size: 28px;
+    }
+
+    .button{
+        font-size: 32px;
+    }
+
+    .contentScreen1Title{
+        font-size: 56px;
+    }
+
+    .contentScreen1Subtitle {
+        
+        font-size: 36px;
+        margin-top: 1.3em;
+    }
+
+    .cityProvinceNationClass{
+        font-size: 52px;
+    }
+
+    .airQualityIndicatorClass{
+        font-size: 72px;
+    }
+
+    .airQualityIndicatorSummaryClass{
+        font-size: 42px;
+    }
+
+    .airQualityIndicatorDescriptionClass{
+       
+        font-size: 28px;
+    }
+
+    .detailsTextClass{
+        font-size: 32px;
+    }
+
+    .sensorStationLocationClass{
+        font-size: 24px;
+    }
+
+    .lastUpdateClass{
+        font-size: 24px;
+    }
+
+    .checkAnoterLocationButtonClass button{
+        font-size: 32px;
+    }
+
+    .errorBulletinBoardClass{
+        font-size: 36px;
+    }
+}
+
+/* media queries for desktop screen */
+
+@media (min-width: 600px) and (max-width: 991px) and ( max-height: 799px ){
+
+    .main-container{
+        font-size: 18px;
+    }
+
+    .button{
+        font-size: 18px;
+    }
+
+    .contentScreen1Title{
+        font-size: 38px;
+    }
+
+    .blockText2{
+        margin-top: 30px;
+        margin-bottom: 40px;
+    }
+
+    .blockText3{
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+
+    .cityProvinceNationClass{
+        font-size: 26px;
+    }
+
+    .airQualityIndicatorSummaryClass{
+        font-size: 22px;
+    }
+
+    .emoticonImageClass{
+        margin-top: 2em;
+        width: 100px;
+        height: 100px;
+    }
+
+    .sensorStationLocationClass{
+        margin-top: 3em;
+        font-size: 18px;
+    }
+
+    .lastUpdateClass{
+        font-size: 18px;
+    }
+
+    .checkAnoterLocationButtonClass button{
+        margin-top: 0.9em;
+        height: 70%;
+    }
+
+}
+
+@media (min-width: 992px) and ( max-height: 799px ){
+
+    .main-container{
+        font-size: 18px;
+    }
+
+    .contentScreen1ContainerClass{
+        height: 90%;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .button{
+        font-size: 16px;
+    }
+
+    .contentScreen1Title{
+        font-size: 42px;
+    }
+
+    .contentScreen1Subtitle{
+        display: block;
+        margin-left: 0px;
+    }
+
+    .blockText1{
+        display: block;
+    }
+
+    .blockText1SubBlock{
+        display: none;
+    }
+
+    .blockText2{
+        display: block;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .blockText1, .blockText2, .blockText3{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .locationInsertAndButtonRow{
+        flex-direction: row;
+        padding-top: 20px;
+    }
+
+   .locationInsertInputTextRowClass{
+        width: 85%;
+        height: 100%;
+    }
+
+    .locationInsertInputText{
+        width: 100%;
+        height: 100%;
+        margin-left: 20px;
+    }
+
+    .locationCheckButtonRowClass{
+        width: 40%;
+        height: 100%;
+    }
+
+    .locationCheckButtonClass{
+        width: 70%;
+        height: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .currentLocationCheckButtonClass{
+        width: 40%;
+    }
+
+    .contentScreen2ContainerClass{
+        height: 95%;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .cityProvinceNationClass{
+        font-size: 24px;
+        margin-top: 20px;
+    }
+
+    .airQualityIndicatorClass{
+        font-size: 32px;
+        margin: 0.7em;
+    }
+
+    .airQualityIndicatorSummaryClass{
+        font-size: 22px;
+        margin-bottom: 2em;
+    }
+
+    .airQualityIndicatorDescriptionClass{
+        display: block;
+    }
+
+    .detailsClass{
+        display: block;
+        font-size: 21px;
+    }
+
+    .detailsTextClass{
+        font-weight: bolder;
+        margin: 1.4em;
+    }
+
+    .iaqiRow{
+        display: flex !important;
+        margin: 0px;
+    }
+
+    .emoticonImageClass{
+        width: 100px;
+        height: 100px;
+        display: none;
+    }
+
+    .sensorStationLocationClass{
+        font-size: 14px;
+    }
+
+    .lastUpdateClass{
+        font-size: 14px;
+    }
+
+    .checkAnoterLocationButtonClass button{
+        font-size: 18px;
+        margin-top: 15px;
+        width: 40%;
+        height: 65%;
+    }
+
+    .errorBulletinBoardClass{
+        margin-top: 0px;
+    }
+
+}

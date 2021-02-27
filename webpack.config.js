@@ -43,6 +43,11 @@ module.exports = {
         type: 'asset/resource',
       },
       {
+        test: /\.svg$/,
+        type: 'asset/resource',
+        use: 'svgo-loader'
+      },
+      {
         test: /\.(css)$/,
         use: [
           'style-loader',

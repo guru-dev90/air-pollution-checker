@@ -1,15 +1,44 @@
 /* require and import section */
 
 import './styles.css';
+//import good from './img/moderate.svg';
 import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import { hasNumericValue, smaller, smallerEq, larger } from 'mathjs';
+const { hasNumericValue, smaller, smallerEq, larger } = require('mathjs');
+/*const { hasNumericValue } = require('mathjs');
+const { smaller } = require('mathjs');
+const { smallerEq } = require('mathjs');
+const { larger } = require('mathjs');*/
+const goodImage = new URL('./img/good.svg', import.meta.url);
+const moderateImage = new URL('./img/moderate.svg', import.meta.url);
+const unhealthyForSensitiveGroupImage = new URL('./img/unhealthy_for_sensitive_group.svg', import.meta.url);
+const unhealthyImage = new URL('./img/unhealthy.svg', import.meta.url);
+const very_unhealthyImage = new URL('./img/very_unhealthy.svg', import.meta.url);
+const hazardousImage = new URL('./img/hazardous.svg', import.meta.url);
 const axios = require('axios');
 const _ = require('lodash');
 const hereApiModule = require('@here/maps-api-for-javascript');
 
 /* end require and import section */
 
-/**/ 
+
+/* Start global error handler definition */
+
+window.onerror = function(message, url, line, col, error) {
+
+  console.log(message + " in script " + url + " at line: " + line + " and col: " + col );
+  console.log("\nFollowing is the error object:\n");
+  console.log(error);
+  errorBulletinBoard.innerText = "Error: A general error occurred! Please, reload the page";
+
+};
+
+/* End global error handler definition */
+
+
+/* air quality indicator legenda */ 
+
 const airQualityTableLegenda = {
   Good:	"Air quality is considered satisfactory, and air pollution poses little or no risk",
   Moderate:	"Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.",
@@ -19,14 +48,15 @@ const airQualityTableLegenda = {
   Hazardous:	"Health alert: everyone may experience more serious health effects"
 };
 
-/* */
+/* end air quality indicator legenda */
+
 
 /* getting references to contentScreen1Container elements*/
 
 const contentScreen1Container = document.querySelector('#contentScreen1ContainerId');
 const locationInsertInputText = document.querySelector('#locationInsertInputText');
-const locationCheckButton = document.querySelector('#locationCheckButton');
-const currentLocationCheckButton = document.querySelector('#currentLocationCheckButton');
+const locationCheckButton = document.querySelector('#locationCheckButtonId');
+const currentLocationCheckButton = document.querySelector('#currentLocationCheckButtonId');
 
 /* end getting references to contentScreen1Container elements */
 
@@ -37,6 +67,7 @@ const contentScreen2Container = document.querySelector('#contentScreen2Container
 const checkAnoterLocationButton = document.querySelector('#checkAnoterLocationButton');
 const cityProvinceNation = document.querySelector('#cityProvinceNationId');
 const airQualityIndicator = document.querySelector('#airQualityIndicatorId');
+const airQualityIndicatorSummary = document.querySelector('#airQualityIndicatorSummaryId');
 const airQualityIndicatorDescription = document.querySelector('#airQualityIndicatorDescriptionId');
 const pm25CellText = document.querySelector('#pm25CellTextId');
 const pm10CellText = document.querySelector('#pm10CellTextId');
@@ -44,45 +75,85 @@ const o3CellText = document.querySelector('#o3CellTextId');
 const no2CellText = document.querySelector('#no2CellTextId');
 const so2CellText = document.querySelector('#so2CellTextId');
 const coCellText = document.querySelector('#coCellTextId');
+const emoticonImage = document.querySelector('#emoticonImageId');
 const sensorStationDescription = document.querySelector('#sensorStationDescriptionId');
 const lastUpdate = document.querySelector('#lastUpdateId');
 
 /* end getting references to contentScreen2Container elements*/
 
 
+/* getting references to errorBulletinBoard elements*/
+
+const errorBulletinBoard = document.querySelector('#errorBulletinBoardId');
+
+/* end getting references to errorBulletinBoard elements*/
+
+
 /* start event listener setting */
 
 currentLocationCheckButton.addEventListener('click', () => {
-  getLocationCoordinates(null);
+
+  errorBulletinBoard.innerHTML = '';
+  getLocationCoordinates( null );
+
 });
 
 locationCheckButton.addEventListener('click', () => {
   
   if( locationInsertInputText.value !== '' ){
+
+    errorBulletinBoard.innerHTML = '';
+
     let locationInsertInputTextValue = locationInsertInputText.value;
     locationInsertInputText.value = '';
-    getLocationCoordinates(locationInsertInputTextValue);
+    getLocationCoordinates( locationInsertInputTextValue );
+
+  }
+  else{
+
+    errorBulletinBoard.innerHTML = 'Error: Please, insert a non empty location';
+
   }
 
 });
 
 checkAnoterLocationButton.addEventListener('click',() => {
+
+  errorBulletinBoard.innerHTML = '';
+
   contentScreen1Container.style.display = 'block';
   contentScreen2Container.style.display = 'none';
+
 });
 
 /* end event listener setting */ 
 
+/* start error type classes */ 
+
+class InvalidResultsError extends Error{    
+
+  constructor(message) {
+      super(message); 
+      this.name = "InvalidResultsError"; 
+  }
+
+}
+
+/* end error type classes */
+
+
+/* ---------------------------------------------------------------------------------------------------------------- */
 
 /* PROGRAM FUNCTIONS START*/ 
 
+/* ---------------------------------------------------------------------------------------------------------------- */
 
 
-function getLocationCoordinates(userProvidedLocation){
+function getLocationCoordinates( userProvidedLocation ){
 
-  if(userProvidedLocation){  // get the lat/lng of the location provided by the user
+  if( userProvidedLocation ){  // get the lat/lng of the location provided by the user
 
-    getCoorinatesOfProvidedLocationWithHereApi(userProvidedLocation);
+    getCoorinatesOfProvidedLocationWithHereApi( userProvidedLocation );
 
   }
   else{  // get the device's current location in lat/lng format
@@ -93,11 +164,13 @@ function getLocationCoordinates(userProvidedLocation){
 
 }
 
-function alert(){
-  console.log('Error with Geocoding/Reverse Geocoding service');
+function hereApiErrorFunctionHandler(){
+
+  errorBulletinBoard.innerHTML = 'Error: An error occurred while getting data from the server';
+
 }
 
-function getCoorinatesOfProvidedLocationWithHereApi(userProvidedLocation){
+function getCoorinatesOfProvidedLocationWithHereApi( userProvidedLocation ){
 
   // Instantiate a platform object:
   let platform = new H.service.Platform({
@@ -112,23 +185,31 @@ function getCoorinatesOfProvidedLocationWithHereApi(userProvidedLocation){
   service.geocode({
     q: userProvidedLocation
   }, (results) => {
-    // takes just the first result
-    let item = results.items[0];
-    console.log('Uso delle API here');
-    console.log('Risultati:');
-    console.log(item);
-    let locationWithExtendedInformation = _.get(item, 'address.label' );
-    let lat = _.get(item, 'position.lat' );
-    let lng = _.get(item, 'position.lng' );
-    queryAqicnApi( locationWithExtendedInformation, lat, lng );
 
-    /*results.items.forEach((item) => {
-      console.log('Uso delle API here');
-      console.log('Risultati:');
-      console.log(item);
-      apiQuery(location,item.position.lat, item.position.lng);
-    });*/
-  }, alert); // vedere error callback alert
+    try{
+    
+      // takes just the first result
+      let item = results.items[0];
+      let locationWithExtendedInformation = _.get(item, 'address.label' );
+      let lat = _.get(item, 'position.lat' );
+      let lng = _.get(item, 'position.lng' );
+
+      if ( ! ( item && locationWithExtendedInformation && lat && lng ) ){ // if any of the variable are null/undefined throw error
+        throw new InvalidResultsError();
+      }
+
+      queryAqicnApi( locationWithExtendedInformation, lat, lng );
+
+    }catch(error){
+
+      if ( error instanceof InvalidResultsError )
+        errorBulletinBoard.innerHTML = 'Error: An error occurred while validating data from the server';
+      else
+        throw error;
+
+    }
+
+  }, hereApiErrorFunctionHandler ); 
 
 }
 
@@ -141,19 +222,33 @@ function getDeviceCurrentCoordinatesWithJSApi(){
   };
   
   function success( currentPositionoordinates ) {
-    let coordinates = _.get( currentPositionoordinates , 'coords' );
-    let lat = _.get( coordinates, 'latitude');
-    let lng = _.get( coordinates, 'longitude');
 
-    console.log('Your current position is:');
-    console.log(`Latitude : ${coordinates.latitude}`);
-    console.log(`Longitude: ${coordinates.longitude}`);
-    console.log(`More or less ${coordinates.accuracy} meters.`);
-    reverseGeocodeFromCoordinates( lat, lng );
+    try{
+      
+      let coordinates = _.get( currentPositionoordinates , 'coords' );
+      let lat = _.get( coordinates, 'latitude');
+      let lng = _.get( coordinates, 'longitude');
+
+      if ( !( coordinates && lat && lng ) ){
+
+        throw new InvalidResultsError();
+
+      }
+
+      reverseGeocodeFromCoordinates( lat, lng );
+
+    }catch(err){
+
+      if ( err instanceof InvalidResultsError )
+        errorBulletinBoard.innerHTML = 'Error: An error occurred while validating your position data';
+      else
+        throw err;
+
+    }
   }
   
-  function error(err) {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
+  function error() {
+    errorBulletinBoard.innerHTML = 'Error: An error occurred while getting your position data';
   }
   
   navigator.geolocation.getCurrentPosition(success, error, options);
@@ -175,88 +270,138 @@ function reverseGeocodeFromCoordinates( lat, lng ){
   service.reverseGeocode({
     at: `${lat},${lng}`
   }, (results) => {
-    
-    let locationWithExtendedInformation = _.get(results.items[0], 'address.city') + ', ' +
-                   _.get(results.items[0], 'address.state') + ', ' +
-                   _.get(results.items[0], 'address.countryName');
-    queryAqicnApi( locationWithExtendedInformation, lat, lng);
-  
-  }, alert);
+
+    try{
+      
+      let city = _.get(results.items[0], 'address.city');
+      let state = _.get(results.items[0], 'address.state');
+      let countryName = _.get(results.items[0], 'address.countryName');
+
+      if ( !( city && state && countryName ) ){
+
+        throw new InvalidResultsError();
+
+      }
+      
+      let locationWithExtendedInformation = city + ', ' + state + ', ' + countryName;
+      queryAqicnApi( locationWithExtendedInformation, lat, lng);
+
+    }catch(error){
+
+      if ( error instanceof InvalidResultsError )
+        errorBulletinBoard.innerHTML = 'Error: An error occurred while validating data from the server';
+      else
+        throw error;
+
+    }
+  }, hereApiErrorFunctionHandler );
 }
 
 function queryAqicnApi( locationWithExtendedInformation, lat, lng ){
-  //pollution api key:  0b4dd2b230957a8157eddcbf4561fa70aab8e91b
-  //let lat = 42.505699;
-  //let lng = 12.656161;
-  let endpointLink = 'https://api.waqi.info/feed/geo:' + lat + ';' + lng + '/?token=' + process.env.WAQI_SERVICE_APIKEY;
 
-  //'https://api.waqi.info/feed/geo::lat;:lng/?token=:token'
+  let waqiEndpointLink = 'https://api.waqi.info/feed/geo:' + lat + ';' + lng + '/?token=' + process.env.WAQI_SERVICE_APIKEY;
 
-  axios.get( endpointLink)
+  axios.get( waqiEndpointLink)
     .then(function (response) {
-      console.log(response);
+
       parseJson( locationWithExtendedInformation, response );
+
     })
-    .catch(function (error) {
-      console.log(error);
-    })
-    .then(function () {
-      // always executed
+    .catch(function () {
+
+      errorBulletinBoard.innerHTML = 'Error: An error occurred while getting data from the server';
+
     }); 
+
 }
 
 function parseJson( locationWithExtendedInformation, jsonResponse ){
 
-  let airQualityIndicator = _.get(jsonResponse, 'data.data.aqi' );
-  let airQualityIndicatorDescription;
+  try{
+    
+    let airQualityIndicatorInteger = _.get(jsonResponse, 'data.data.aqi' );
 
-  switch(true){
-    case ( airQualityIndicator < 0 ):
-      console.log("Errore airQualityIndicator < 0");
-      break;
-    case ( airQualityIndicator <= 50 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.Good;
-      break;
-    case ( airQualityIndicator <= 100 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.Moderate;
-      break;
-    case ( airQualityIndicator <= 150 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.UnhealthyforSensitiveGroups;
-      break;
-    case ( airQualityIndicator <= 200 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.Unhealthy;
-      break;
-    case ( airQualityIndicator <= 300 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.VeryUnhealthy;
-      break;
-    case ( airQualityIndicator > 300 ):
-      airQualityIndicatorDescription = airQualityTableLegenda.Hazardous;
-      break;
-    default:
-      console.log("Errore default");
-      break;
+    //use mathjs functions 
+    if( !airQualityIndicatorInteger || !hasNumericValue(airQualityIndicatorInteger) || smaller( airQualityIndicatorInteger, 0 ) ){
+      throw new InvalidResultsError();
+    }
+
+    let airQualityIndicatorDescriptionString;
+    let airQualityIndicatorSummaryString;
+    let airQualityEmoticonImage;
+
+    switch(true){
+
+      case ( smallerEq( airQualityIndicatorInteger, 50 ) ): // airQualityIndicatorInteger is between 0 (included ) and 50 (included)
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.Good;
+        airQualityIndicatorSummaryString = 'Air quality is Good';
+        airQualityEmoticonImage = goodImage;
+        break;
+      case ( smallerEq( airQualityIndicatorInteger, 100 ) ):
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.Moderate;
+        airQualityIndicatorSummaryString = 'Air quality is Moderate';
+        airQualityEmoticonImage = moderateImage;
+        break;
+      case ( smallerEq( airQualityIndicatorInteger, 150 ) ):
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.UnhealthyForSensitiveGroups;
+        airQualityIndicatorSummaryString = 'Air quality is Unhealthy for Sensitive Groups';
+        airQualityEmoticonImage = unhealthyForSensitiveGroupImage;
+        break;
+      case ( smallerEq( airQualityIndicatorInteger, 200 ) ):
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.Unhealthy;
+        airQualityIndicatorSummaryString = 'Air quality is Unhealthy';
+        airQualityEmoticonImage = unhealthyImage;
+        break;
+      case ( smallerEq( airQualityIndicatorInteger, 300 ) ):
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.VeryUnhealthy;
+        airQualityIndicatorSummaryString = 'Air quality is Very Unhealthy';
+        airQualityEmoticonImage = very_unhealthyImage;
+        break;
+      case ( larger( airQualityIndicatorInteger, 300 ) ):
+        airQualityIndicatorDescriptionString = airQualityTableLegenda.Hazardous;
+        airQualityIndicatorSummaryString = 'Air quality is Hazardous';
+        airQualityEmoticonImage = hazardousImage;
+        break;
+      default:
+        throw new InvalidResultsError();
+        break;
+    }
+    
+    let iaqiObject = _.get(jsonResponse, 'data.data.iaqi' );
+    let sensorStationDescriptionString = _.get(jsonResponse, 'data.data.city.name' );
+    let lastUpdateString = _.get(jsonResponse, 'data.data.time.s' ); 
+
+    if( !( iaqiObject && sensorStationDescriptionString && lastUpdateString ) ){
+      throw new InvalidResultsError();
+    }
+
+
+    displayData(locationWithExtendedInformation,airQualityIndicatorInteger,airQualityIndicatorSummaryString,airQualityIndicatorDescriptionString,iaqiObject,airQualityEmoticonImage ,sensorStationDescriptionString,lastUpdateString);
+
+  }catch(err){
+
+    if ( err instanceof InvalidResultsError )
+      errorBulletinBoard.innerHTML = 'Error: An error occurred while parsing data';
+    else if ( err instanceof TypeError )
+      errorBulletinBoard.innerHTML = 'Error: An error occurred while parsing data';
+    else
+      throw err;
+
   }
-  
-  let iaqiObject = _.get(jsonResponse, 'data.data.iaqi' );
-  //console.log(iaqi);
 
-  
-
-  let sensorStationDescription = _.get(jsonResponse, 'data.data.city.name' );
-  let lastUpdate = _.get(jsonResponse, 'data.data.time.s' ); // formattare in che formato ???
-
-  displayData(locationWithExtendedInformation,airQualityIndicator,airQualityIndicatorDescription,iaqiObject,sensorStationDescription,lastUpdate);
 }
 
-function displayData(cityProvinceNationString, airQualityIndicatorString, airQualityIndicatorDescriptionString, 
-  iaqiObject, sensorStationDescriptionString, lastUpdateString){
+// <----------------------------------------------------------------------------DEBUGGATO FINO A QUI
+
+function displayData( cityProvinceNationString, airQualityIndicatorString, airQualityIndicatorSummaryString, airQualityIndicatorDescriptionString, 
+  iaqiObject, airQualityEmoticonImage, sensorStationDescriptionString, lastUpdateString ){
 
     contentScreen1Container.style.display = 'none';
     contentScreen2Container.style.display = 'block';
-    console.log(_.get(iaqiObject, 'pm25.v'));
 
-    cityProvinceNation.innerHTML = _.capitalize(cityProvinceNationString);
+    cityProvinceNation.innerHTML = cityProvinceNationString;
     airQualityIndicator.innerHTML = airQualityIndicatorString;
+    airQualityIndicatorSummary.innerHTML = airQualityIndicatorSummaryString
     airQualityIndicatorDescription.innerHTML = airQualityIndicatorDescriptionString;
     pm25CellText.innerHTML = _.get(iaqiObject, 'pm25.v') ? _.get(iaqiObject, 'pm25.v') : '-' ;
     pm10CellText.innerHTML = _.get(iaqiObject, 'pm10.v') ? _.get(iaqiObject, 'pm10.v') : '-' ;
@@ -264,11 +409,8 @@ function displayData(cityProvinceNationString, airQualityIndicatorString, airQua
     no2CellText.innerHTML = _.get(iaqiObject, 'no2.v') ? _.get(iaqiObject, 'no2.v') : '-' ;
     so2CellText.innerHTML = _.get(iaqiObject, 'so2.v') ? _.get(iaqiObject, 'so2.v') : '-';
     coCellText.innerHTML = _.get(iaqiObject, 'co.v') ? _.get(iaqiObject, 'co.v') : '-';
-    sensorStationDescription.innerHTML = 'Sensor Station Location: ' + sensorStationDescriptionString;
-    lastUpdate.innerHTML = 'Data Last Update: ' + lastUpdateString;
+    emoticonImage.src = airQualityEmoticonImage;
+    sensorStationDescription.innerHTML = `<b>Station Location:</b> ${sensorStationDescriptionString}`;
+    lastUpdate.innerHTML = `<b>Last Update:</b> ${lastUpdateString}`;
   
-}
-
-function colorCell(){ // da colorazione a cella in base a valore iaqi
-
 }

@@ -7,7 +7,10 @@
     <title>Air pollution checker</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway:ital,wght@1,900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Roboto&display=swap" rel="stylesheet">
+
   </head>
   <body>
     
@@ -26,31 +29,35 @@
         <div class="row">
           <div class="col-sm">
             <p class="blockText1">
-              The application has the goal to verify the current air pollution state using data that have been kindly provided us by the World Air Quality Index Project.
-              <br>You can check the current air pollution quality by either using your device location data or providing a location of your choice.
-              <br>Please remember, the air pollution data displayed are always referencing the data provided by the nearest measuring station.
+              The application has the goal to verify the current air pollution state using data that have been kindly provided us by the <u>World Air Quality Index Project.</u>
+              <span class="blockText1SubBlock"><br><br>You can check the current air pollution quality by either using your device location data or providing a location of your choice.</span>
+              <br><b>Please remember, the air pollution data displayed are always referencing the data provided by the nearest measuring station.</b>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm">
-            <p class="preCheckLocationTest blockText2">Check air quality in a specific location : </p>
+            <p class="blockText2">Check air quality in a specific location of your choice: </p>
           </div>
         </div>
         <div class="row">
           <div class="locationInsertAndButtonRow col-sm">
-            <input id="locationInsertInputText" class="locationInsertInputText" type="text"></input> 
-            <button id="locationCheckButton" class="button locationCheckButton">Check Location</button>
+            <div class="locationInsertInputTextRowClass">
+              <input id="locationInsertInputText" class="locationInsertInputText" type="text"></input> 
+            </div>
+            <div class="locationCheckButtonRowClass">
+              <button id="locationCheckButtonId" class="button locationCheckButtonClass">Check Location</button>
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm">
-            <p class="blockText3">or check current location instead:</p>
+            <p class="blockText3">or check in your location instead:</p>
           </div>
         </div>
         <div class="row">
-          <div class="currentLocationCheckButton col-sm">
-            <button id="currentLocationCheckButton" class="button">Check current location</button>
+          <div class="currentLocationCheckButtonRowClass col-sm">
+            <button id="currentLocationCheckButtonId" class="button currentLocationCheckButtonClass">Check your location</button>
           </div>
         </div>
       </div>
@@ -58,7 +65,7 @@
       <div id="contentScreen2ContainerId" class="contentScreen2ContainerClass">
         <div class="row">
           <div class="col-sm">
-            <h3 id="cityProvinceNationId" class="cityProvinceNationClass">NomeCittà,provincia,nazione</h3>
+            <h2 id="cityProvinceNationId" class="cityProvinceNationClass">NomeCittà,provincia,nazione</h2>
           </div>
         </div>
         <div class="row">
@@ -68,32 +75,42 @@
         </div>
         <div class="row">
           <div class="col-sm">
+            <p id="airQualityIndicatorSummaryId" class="airQualityIndicatorSummaryClass">Air Quality Indicator Description short</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
             <p id="airQualityIndicatorDescriptionId" class="airQualityIndicatorDescriptionClass">Air Quality Indicator Description</p>
           </div>
         </div>
         <div class="row">
           <div class="detailsClass col-sm">
-            Details:
+            <p class="detailsTextClass"> Details: </p>
           </div>
         </div>
         <div class="iaqiRow row">
           <div class="iaqiCol col-sm">
-            <p id="pm25CellTextId" class="pm25CellTextClass">pm25</p>
+            <p id="pm25CellTextId" class="colCell pm25CellTextClass">pm25</p>
           </div>
           <div class="iaqiCol col-sm">
-            <p id="pm10CellTextId" class="pm10CellTextClass">pm10</p>
+            <p id="pm10CellTextId" class="colCell pm10CellTextClass">pm10</p>
           </div>
           <div class="iaqiCol col-sm">
-            <p id="o3CellTextId" class="o3CellTextClass">o3</p>
+            <p id="o3CellTextId" class="colCell o3CellTextClass">o3</p>
           </div>
           <div class="iaqiCol col-sm">
-            <p id="no2CellTextId" class="no2CellTextClass">no2</p>
+            <p id="no2CellTextId" class="colCell no2CellTextClass">no2</p>
           </div>
           <div class="iaqiCol col-sm">
-            <p id="so2CellTextId" class="so2CellTextClass">so2</p>
+            <p id="so2CellTextId" class="colCell so2CellTextClass">so2</p>
           </div>
           <div class="iaqiCol col-sm">
-            <p id="coCellTextId" class="coCellTextClass">co</p>
+            <p id="coCellTextId" class="colCell coCellTextClass">co</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm emoticonImageColClass">
+            <img id="emoticonImageId" class="emoticonImageClass"></img>
           </div>
         </div>
         <div class="row">
@@ -111,6 +128,9 @@
             <button id="checkAnoterLocationButton" class="button">Check another location</button>
           </div>
         </div>
+      </div>
+      <div id="errorBulletinBoardContainerId" class="errorBulletinBoardContainerClass">
+        <p id="errorBulletinBoardId" class="errorBulletinBoardClass"></p>
       </div>
     </div>
   </body>
