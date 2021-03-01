@@ -32,6 +32,9 @@ window.onerror = function(message, url, line, col, error) {
   console.log(error);
   errorBulletinBoard.innerText = "Error: A general error occurred! Please, reload the page";
 
+  currentLocationCheckButton.removeAttribute('disabled');
+  locationCheckButton.removeAttribute('disabled');
+
 };
 
 /* End global error handler definition */
@@ -93,6 +96,9 @@ const errorBulletinBoard = document.querySelector('#errorBulletinBoardId');
 
 currentLocationCheckButton.addEventListener('click', () => {
 
+  currentLocationCheckButton.setAttribute('disabled',true);
+  locationCheckButton.setAttribute('disabled',true);
+
   errorBulletinBoard.innerHTML = '';
   getLocationCoordinates( null );
 
@@ -100,6 +106,9 @@ currentLocationCheckButton.addEventListener('click', () => {
 
 locationCheckButton.addEventListener('click', () => {
   
+  currentLocationCheckButton.setAttribute('disabled',true);
+  locationCheckButton.setAttribute('disabled',true);
+
   if( locationInsertInputText.value !== '' ){
 
     errorBulletinBoard.innerHTML = '';
@@ -119,10 +128,14 @@ locationCheckButton.addEventListener('click', () => {
 
 checkAnoterLocationButton.addEventListener('click',() => {
 
+  checkAnoterLocationButton.setAttribute('disabled',true);
+
   errorBulletinBoard.innerHTML = '';
 
   contentScreen1Container.style.display = 'block';
   contentScreen2Container.style.display = 'none';
+
+  checkAnoterLocationButton.removeAttribute('disabled');
 
 });
 
@@ -168,6 +181,9 @@ function hereApiErrorFunctionHandler(){
 
   errorBulletinBoard.innerHTML = 'Error: An error occurred while getting data from the server';
 
+  currentLocationCheckButton.removeAttribute('disabled');
+  locationCheckButton.removeAttribute('disabled');
+
 }
 
 function getCoorinatesOfProvidedLocationWithHereApi( userProvidedLocation ){
@@ -201,6 +217,9 @@ function getCoorinatesOfProvidedLocationWithHereApi( userProvidedLocation ){
       queryAqicnApi( locationWithExtendedInformation, lat, lng );
 
     }catch(error){
+
+      currentLocationCheckButton.removeAttribute('disabled');
+      locationCheckButton.removeAttribute('disabled');
 
       if ( error instanceof InvalidResultsError )
         errorBulletinBoard.innerHTML = 'Error: An error occurred while validating data from the server';
@@ -239,6 +258,9 @@ function getDeviceCurrentCoordinatesWithJSApi(){
 
     }catch(err){
 
+      currentLocationCheckButton.removeAttribute('disabled');
+      locationCheckButton.removeAttribute('disabled');
+
       if ( err instanceof InvalidResultsError )
         errorBulletinBoard.innerHTML = 'Error: An error occurred while validating your position data';
       else
@@ -249,6 +271,9 @@ function getDeviceCurrentCoordinatesWithJSApi(){
   
   function error() {
     errorBulletinBoard.innerHTML = 'Error: An error occurred while getting your position data';
+
+    currentLocationCheckButton.removeAttribute('disabled');
+    locationCheckButton.removeAttribute('disabled');
   }
   
   navigator.geolocation.getCurrentPosition(success, error, options);
@@ -288,6 +313,9 @@ function reverseGeocodeFromCoordinates( lat, lng ){
 
     }catch(error){
 
+      currentLocationCheckButton.removeAttribute('disabled');
+      locationCheckButton.removeAttribute('disabled');
+
       if ( error instanceof InvalidResultsError )
         errorBulletinBoard.innerHTML = 'Error: An error occurred while validating data from the server';
       else
@@ -310,6 +338,9 @@ function queryAqicnApi( locationWithExtendedInformation, lat, lng ){
     .catch(function () {
 
       errorBulletinBoard.innerHTML = 'Error: An error occurred while getting data from the server';
+
+      currentLocationCheckButton.removeAttribute('disabled');
+      locationCheckButton.removeAttribute('disabled');
 
     }); 
 
@@ -380,6 +411,9 @@ function parseJson( locationWithExtendedInformation, jsonResponse ){
 
   }catch(err){
 
+    currentLocationCheckButton.removeAttribute('disabled');
+    locationCheckButton.removeAttribute('disabled');
+
     if ( err instanceof InvalidResultsError )
       errorBulletinBoard.innerHTML = 'Error: An error occurred while parsing data';
     else if ( err instanceof TypeError )
@@ -390,8 +424,6 @@ function parseJson( locationWithExtendedInformation, jsonResponse ){
   }
 
 }
-
-// <----------------------------------------------------------------------------DEBUGGATO FINO A QUI
 
 function displayData( cityProvinceNationString, airQualityIndicatorString, airQualityIndicatorSummaryString, airQualityIndicatorDescriptionString, 
   iaqiObject, airQualityEmoticonImage, sensorStationDescriptionString, lastUpdateString ){
@@ -412,5 +444,8 @@ function displayData( cityProvinceNationString, airQualityIndicatorString, airQu
     emoticonImage.src = airQualityEmoticonImage;
     sensorStationDescription.innerHTML = `<b>Station Location:</b> ${sensorStationDescriptionString}`;
     lastUpdate.innerHTML = `<b>Last Update:</b> ${lastUpdateString}`;
+
+    currentLocationCheckButton.removeAttribute('disabled');
+    locationCheckButton.removeAttribute('disabled');
   
 }
