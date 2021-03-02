@@ -1,4 +1,6 @@
 /*Begin Site Wide Styles */
+@import url('https://fonts.googleapis.com/css2?family=Rammetto+One&family=Roboto&display=swap');
+
 * {
     margin: 0px;
     padding: 0px;
@@ -97,7 +99,7 @@ CONTENT SCREEN1 STYLES
     letter-spacing: 1px;
     color: #007dc1;
     text-shadow: rgb(0, 0, 0) 3px 3px 2px;
-    margin: 15px 0px;
+   /* margin: 15px 0px;*/
 
 }
 
@@ -237,6 +239,21 @@ CONTENT SCREEN2 STYLES
     display: none;
 }
 
+.iaqiHeaderRow{
+    border-top: solid 1px #6c757d;
+    display: none !important;
+}
+
+.iaqiHeaderCol{
+    border: solid 1px #6c757d;
+}
+
+.colCellHeaderText{
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
 .iaqiRow{
     border: solid 1px #6c757d;
     margin: 2.3em;
@@ -249,7 +266,8 @@ CONTENT SCREEN2 STYLES
 
 .colCell{
     text-align: center;
-    margin-top: 15px;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
 }
 
 .emoticonImageColClass{
@@ -376,6 +394,10 @@ ERROR BULLETIN BOARD STYLES
         font-size: 21px;
     }
 
+    .contentScreen1ContainerClass{
+        height: 90%;
+    }
+
     .contentScreen1Title{
         font-size: 42px;
     }
@@ -425,6 +447,10 @@ ERROR BULLETIN BOARD STYLES
         margin: 1.4em;
     }
 
+    .iaqiHeaderRow{
+        display: flex !important;
+    }
+
     .iaqiRow{
         display: flex !important;
     }
@@ -448,6 +474,10 @@ ERROR BULLETIN BOARD STYLES
         margin-top: 30px;
     }
 
+    .errorBulletinBoardClass{
+        margin-top: 0px;
+    }
+
 }
 
 @media (min-width: 800px) and ( min-height: 800px ){
@@ -457,6 +487,10 @@ ERROR BULLETIN BOARD STYLES
 
     .button{
         font-size: 32px;
+    }
+
+    .contentScreen1ContainerClass{
+        height: 80%;
     }
 
     .contentScreen1Title{
@@ -673,6 +707,11 @@ ERROR BULLETIN BOARD STYLES
     .detailsTextClass{
         font-weight: bolder;
         margin: 1.4em;
+    }
+
+    .iaqiHeaderRow{
+        display: flex !important;
+        margin: 0px;
     }
 
     .iaqiRow{
