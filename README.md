@@ -1,14 +1,5 @@
 
 
-[![Contributors][contributors-shield]][https://github.com/guru-dev90/air-pollution-checker/contributors]
-[![Forks][forks-shield]][https://github.com/guru-dev90/air-pollution-checker/fork]
-[![Issues][issues-shield]][https://github.com/guru-dev90/air-pollution-checker/issues]
-[![MIT License][license-shield]][https://github.com/guru-dev90/air-pollution-checker/#license]
-[![LinkedIn][linkedin-shield]][https://it.linkedin.com/in/umberto-giacomini-86758590]
-
-
-
-<!-- PROJECT LOGO -->
 <br />
 <p align="center">
 
@@ -61,7 +52,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 The project has the goal to verify the current air pollution state in a given location using API publicly available at the <b>World Air Quality Index Project.</b>
 <br>You can check the current air pollution quality by either using your device location data or providing a location of your choice in the input box.
@@ -89,14 +79,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-To let the project work properly you need the following:
-
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-N.B. The application has been developed and tested on Node version 13.14.0 that is available here for download:
+The application has been developed and tested on Node version 13.14.0 that is available here for download:
 
       https://nodejs.org/uk/blog/release/v13.14.0/
 
@@ -110,13 +93,13 @@ N.B. The application has been developed and tested on Node version 13.14.0 that 
 
 2. Get your api keys using the following links:
 
-   HERE API KEY:  https://developer.here.com/tutorials/getting-here-credentials/#signing-up-and-getting-your-api-key  ( Please, get the Javascript one ) 
+   JAVASCRIPT HERE API KEY:  https://developer.here.com/tutorials/getting-here-credentials/#signing-up-and-getting-your-api-key <br><br>
    WAQI API KEY:  https://aqicn.org/data-platform/token/#/
 
 3. Create a file named .env with the following content
    ```sh
-   HERE_SERVICE_APIKEY=" your here service api key  "
-   WAQI_SERVICE_APIKEY=" your waqi service api key "
+   HERE_SERVICE_APIKEY="your here service api key"
+   WAQI_SERVICE_APIKEY="your waqi service api key"
    ```
 
 4. Install NPM packages
@@ -167,7 +150,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Umberto Giacomini - giacominiu@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/guru-dev90/air-pollution-checker)
+Project Link: [https://github.com/guru-dev90/air-pollution-checker](https://github.com/guru-dev90/air-pollution-checker)
 
 
 
@@ -175,7 +158,6 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 ## Acknowledgements
 
 * I want to thank all the great guys at start2impact for inspiring me to develop this project
-
 
 
 
