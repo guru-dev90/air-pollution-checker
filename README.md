@@ -11,7 +11,7 @@
     <a href="https://github.com/guru-dev90/air-pollution-checker"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/guru-dev90/air-pollution-checker">View Demo</a>
+    <a href="https://air-quality-checker-15561.web.app/">View Demo</a>
     ·
     <a href="https://github.com/guru-dev90/air-pollution-checker/issues">Report Bug</a>
     ·
@@ -150,7 +150,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Umberto Giacomini - giacominiu@gmail.com
 
-Project Link: [https://github.com/guru-dev90/air-pollution-checker](https://github.com/guru-dev90/air-pollution-checker)
+Project Link: [https://air-quality-checker-15561.web.app/](https://air-quality-checker-15561.web.app/)
 
 
 
